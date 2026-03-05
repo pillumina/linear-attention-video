@@ -1,0 +1,23 @@
+{
+  "name": "linear-attention-video",
+  "version": "1.0.0",
+  "description": "Technical deep dive into Linear Attention Mechanisms",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion render LinearAttention out/video.mp4",
+    "render": "remotion render"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@remotion/transitions": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.0",
+    "katex": "^0.16.9"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/katex": "^0.16.7",
+    "typescript": "^5.0.0"
+  }
+}
