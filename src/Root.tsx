@@ -7,7 +7,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="LinearAttention"
         component={LinearAttentionVideoSimple}
-        durationInFrames={300}  // 10 seconds preview
+        durationInFrames={1170}  // 39 seconds: 120+180+180+210+180+150+150
         fps={30}
         width={1280}
         height={720}
