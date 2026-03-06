@@ -1,5 +1,6 @@
 import React from 'react';
-import {TransitionSeries, Sequence} from 'remotion';
+import {Sequence} from 'remotion';
+import {TransitionSeries} from '@remotion/transitions';
 
 const TitleScene: React.FC = () => {
   return (
@@ -350,3 +351,5 @@ const styles: {[key: string]: React.CSSProperties} = {
     fontWeight: 600,
   },
 };
+
+export { LinearAttentionVideoSimple };
