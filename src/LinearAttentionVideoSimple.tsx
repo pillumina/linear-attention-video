@@ -1,5 +1,4 @@
 import React from 'react';
-import {Sequence} from 'remotion';
 import {TransitionSeries} from '@remotion/transitions';
 
 const TitleScene: React.FC = () => {
@@ -145,13 +144,13 @@ const SummaryScene: React.FC = () => {
 export const LinearAttentionVideoSimple: React.FC = () => {
   return (
     <TransitionSeries>
-      <Sequence durationInFrames={120}><TitleScene /></Sequence>
-      <Sequence durationInFrames={180}><ProblemScene /></Sequence>
-      <Sequence durationInFrames={180}><SolutionScene /></Sequence>
-      <Sequence durationInFrames={210}><DerivationScene /></Sequence>
-      <Sequence durationInFrames={180}><ComparisonScene /></Sequence>
-      <Sequence durationInFrames={150}><ApplicationScene /></Sequence>
-      <Sequence durationInFrames={150}><SummaryScene /></Sequence>
+      <TransitionSeries.Sequence durationInFrames={120}><TitleScene /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={180}><ProblemScene /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={180}><SolutionScene /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={210}><DerivationScene /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={180}><ComparisonScene /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={150}><ApplicationScene /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={150}><SummaryScene /></TransitionSeries.Sequence>
     </TransitionSeries>
   );
 };
