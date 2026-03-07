@@ -1,5 +1,6 @@
 import React from 'react';
 import {TransitionSeries} from '@remotion/transitions';
+import {AbsoluteFill, Sequence} from 'remotion';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 
@@ -49,17 +50,6 @@ const styles: {[key: string]: React.CSSProperties} = {
     fontWeight: 300,
     color: '#94a3b8',
     marginBottom: '1.5rem',
-  },
-  formula: {
-    fontSize: '2.5rem',
-    color: '#3b82f6',
-    fontFamily: 'monospace',
-    fontWeight: 600,
-    marginBottom: '1.5rem',
-  },
-  author: {
-    fontSize: '1.2rem',
-    color: '#64748b',
   },
   heading: {
     fontSize: '2.8rem',
@@ -157,6 +147,7 @@ const styles: {[key: string]: React.CSSProperties} = {
     textAlign: 'left',
     width: '100%',
     maxWidth: '900px',
+    margin: '0 auto',
   },
   step: {
     display: 'flex',
@@ -167,13 +158,13 @@ const styles: {[key: string]: React.CSSProperties} = {
   stepNum: {
     fontSize: '1.5rem',
     fontWeight: 700,
-    color: '#3b82f6',
     minWidth: '2rem',
   },
   stepText: {
     fontSize: '1.4rem',
     color: '#e2e8f0',
     flex: 1,
+    marginBottom: '0.5rem',
   },
   stepTextSmall: {
     fontSize: '1.2rem',
@@ -278,9 +269,131 @@ const styles: {[key: string]: React.CSSProperties} = {
     fontSize: '1.2rem',
     color: '#60a5fa',
   },
-  equation: {
+  // 新增可视化样式
+  flowChart: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '1.5rem',
+    marginBottom: '2rem',
+    padding: '2rem',
+    backgroundColor: '#1e293b',
+    borderRadius: '0.75rem',
+  },
+  flowBox: {
+    backgroundColor: '#3b82f6',
+    padding: '1rem 1.5rem',
+    borderRadius: '0.5rem',
+    color: 'white',
+    fontWeight: 600,
     fontSize: '1.3rem',
+    minWidth: '150px',
+    textAlign: 'center',
+  },
+  flowBoxGreen: {
+    backgroundColor: '#10b981',
+    padding: '1rem 1.5rem',
+    borderRadius: '0.5rem',
+    color: 'white',
+    fontWeight: 600,
+    fontSize: '1.3rem',
+    minWidth: '150px',
+    textAlign: 'center',
+  },
+  flowBoxPurple: {
+    backgroundColor: '#8b5cf6',
+    padding: '1rem 1.5rem',
+    borderRadius: '0.5rem',
+    color: 'white',
+    fontWeight: 600,
+    fontSize: '1.3rem',
+    minWidth: '150px',
+    textAlign: 'center',
+  },
+  arrow: {
+    fontSize: '2.5rem',
+    color: '#64748b',
+  },
+  architectureBox: {
+    backgroundColor: '#1e293b',
+    padding: '2rem',
+    borderRadius: '0.75rem',
+    width: '100%',
+    maxWidth: '900px',
+    marginBottom: '2rem',
+  },
+  layer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    marginBottom: '1.5rem',
+    padding: '1rem',
+    backgroundColor: '#0f172a',
+    borderRadius: '0.5rem',
+  },
+  layerLabel: {
+    fontSize: '1.4rem',
+    fontWeight: 600,
+    minWidth: '150px',
+    color: '#60a5fa',
+  },
+  layerContent: {
+    flex: 1,
+    display: 'flex',
+    gap: '1rem',
+    flexWrap: 'wrap',
+  },
+  component: {
+    backgroundColor: '#334155',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.25rem',
+    fontSize: '1.1rem',
+    color: '#e2e8f0',
+  },
+  componentHighlight: {
+    backgroundColor: '#3b82f6',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.25rem',
+    fontSize: '1.1rem',
+    color: 'white',
+    fontWeight: 600,
+  },
+  progressBar: {
+    width: '100%',
+    height: '2rem',
+    backgroundColor: '#1e293b',
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
     marginBottom: '1rem',
+  },
+  progressFill: {
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontWeight: 600,
+    fontSize: '1rem',
+  },
+  comparisonTable: {
+    width: '100%',
+    maxWidth: '900px',
+    borderCollapse: 'collapse',
+    marginBottom: '2rem',
+  },
+  tableCell: {
+    padding: '1rem',
+    borderBottom: '1px solid #334155',
+    textAlign: 'left',
+    fontSize: '1.2rem',
+  },
+  tableHeader: {
+    padding: '1rem',
+    borderBottom: '2px solid #3b82f6',
+    textAlign: 'left',
+    fontSize: '1.3rem',
+    fontWeight: 600,
+    color: '#60a5fa',
   },
 };
 
@@ -293,7 +406,7 @@ const TitleScene: React.FC = () => {
       <div style={styles.formulaBoxLarge}>
         <Latex formula="O(n^2) \rightarrow O(n)" displayMode color="#3b82f6" />
       </div>
-      <p style={styles.author}>深度技术解析 · AI 工程师必修</p>
+      <p style={{ fontSize: '1.2rem', color: '#64748b' }}>深度技术解析 · AI 工程师必修</p>
     </div>
   );
 };
@@ -348,36 +461,35 @@ const SolutionScene: React.FC = () => {
   );
 };
 
-// 场景 4.1: 核技巧
-const KernelTrickScene: React.FC = () => {
+// 场景 4: 核技巧（优化版 - 添加流程图）
+const KernelTrickSceneOptimized: React.FC = () => {
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>核技巧 - 将 Softmax 看作核函数</h2>
+      <h2 style={styles.heading}>核技巧 - Softmax 近似</h2>
+      
+      {/* 流程图 */}
+      <div style={styles.flowChart}>
+        <div style={styles.flowBox}>
+          <div>Softmax</div>
+          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>O(n²)</div>
+        </div>
+        <span style={styles.arrow}>→</span>
+        <div style={styles.flowBoxGreen}>
+          <div>核函数</div>
+          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>K(x,y)</div>
+        </div>
+        <span style={styles.arrow}>→</span>
+        <div style={styles.flowBoxPurple}>
+          <div>特征映射</div>
+          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>φ(x)</div>
+        </div>
+      </div>
+
       <div style={styles.steps}>
         <div style={styles.step}>
-          <span style={styles.stepNum}>1</span>
-          <div>
-            <p style={styles.stepText}>标准注意力中的 Softmax：</p>
-            <div style={styles.formulaBox}>
-              <Latex formula="\text{softmax}(QK^T) = K(Q, K)" displayMode />
-            </div>
-          </div>
-        </div>
-        
-        <div style={styles.step}>
-          <span style={styles.stepNum}>2</span>
-          <div>
-            <p style={styles.stepText}>核函数定义（高斯核）：</p>
-            <div style={styles.formulaBox}>
-              <Latex formula="K(x, y) = \exp\left(\frac{x \cdot y^T}{\sqrt{d}}\right)" displayMode />
-            </div>
-          </div>
-        </div>
-        
-        <div style={styles.step}>
-          <span style={styles.stepNum}>3</span>
-          <div>
-            <p style={styles.stepText}><strong style={{color: '#3b82f6'}}>Mercer 定理</strong>：任何正定核函数可分解为：</p>
+          <span style={styles.stepNum}>1️⃣</span>
+          <div style={{flex: 1}}>
+            <p style={styles.stepText}>Mercer 定理：正定核函数可分解</p>
             <div style={styles.formulaBox}>
               <Latex formula="K(x, y) = \phi(x) \cdot \phi(y)^T" displayMode />
             </div>
@@ -385,38 +497,41 @@ const KernelTrickScene: React.FC = () => {
         </div>
         
         <div style={styles.step}>
-          <span style={styles.stepNum}>4</span>
-          <div style={styles.insight}>
-            <p style={styles.insightText}>
-              💡 关键 insight：<Latex formula="\text{softmax}(QK^T) \approx \phi(Q) \cdot \phi(K)^T" />
-            </p>
-            <p style={{...styles.stepTextSmall, marginTop: '0.5rem'}}>
-              其中 <Latex formula="\phi(x)" /> 的维度可以远小于 <Latex formula="n" />
-            </p>
+          <span style={styles.stepNum}>2️⃣</span>
+          <div style={{flex: 1}}>
+            <p style={styles.stepText}>关键 insight</p>
+            <div style={styles.formulaBox}>
+              <Latex formula="\text{softmax}(QK^T) \approx \phi(Q) \cdot \phi(K)^T" displayMode />
+            </div>
           </div>
+        </div>
+        
+        <div style={styles.insight}>
+          <p style={styles.insightText}>
+            💡 φ(x) 的维度可以远小于 n，从而降低复杂度
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-// 场景 4.2: 特征映射
-const FeatureMapScene: React.FC = () => {
+// 场景 5: 特征映射（优化版）
+const FeatureMapSceneOptimized: React.FC = () => {
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>特征映射 <Latex formula="\phi(x)" /> 的具体形式</h2>
+      <h2 style={styles.heading}>特征映射 φ(x) 的具体形式</h2>
+      
       <div style={styles.content}>
         <h3 style={styles.subheading}>方案 1：随机傅里叶特征（RFF）</h3>
         <div style={styles.formulaBoxLarge}>
-          <Latex formula="\phi(x) = \frac{1}{\sqrt{m}}[\sin(w_1^T x), \cos(w_1^T x), \ldots, \sin(w_m^T x), \cos(w_m^T x)]" displayMode />
+          <Latex formula="\phi(x) = \frac{1}{\sqrt{m}}[\sin(w_1^T x), \cos(w_1^T x), \ldots]" displayMode />
         </div>
-        <p style={styles.textBlue}>
-          其中 <Latex formula="w_i \sim \mathcal{N}(0, \sigma^2 I)" />，<Latex formula="\sigma = 1/\sqrt{d}" />
-        </p>
+        <p style={styles.textBlue}>其中 <Latex formula="w_i \sim \mathcal{N}(0, \sigma^2 I)" /></p>
         
-        <h3 style={{...styles.subheading, marginTop: '1.5rem'}}>方案 2：激活函数（Performer）</h3>
+        <h3 style={{...styles.subheading, marginTop: '2rem'}}>方案 2：激活函数（Performer）</h3>
         <div style={styles.formulaBoxLarge}>
-          <Latex formula="\phi(x) = \text{ReLU}(x) + \varepsilon \quad \text{或} \quad \text{ELU}(x) + 1" displayMode />
+          <Latex formula="\phi(x) = \text{ReLU}(x) + \varepsilon" displayMode />
         </div>
         
         <div style={styles.insight}>
@@ -424,8 +539,7 @@ const FeatureMapScene: React.FC = () => {
             💡 数学保证：<Latex formula="\mathbb{E}[\phi(x) \cdot \phi(y)^T] \approx K(x, y)" />
           </p>
           <p style={{...styles.stepTextSmall, marginTop: '0.5rem'}}>
-            • <Latex formula="m" /> 越大，近似越精确（但 <Latex formula="m \ll n" />）<br/>
-            • 复杂度从 <Latex formula="O(n^2)" /> 降到 <Latex formula="O(n \cdot m^2)" />
+            m 越大，近似越精确（但 m ≪ n）
           </p>
         </div>
       </div>
@@ -433,74 +547,94 @@ const FeatureMapScene: React.FC = () => {
   );
 };
 
-// 场景 4.3: 矩阵结合律
-const MatrixAssociativityScene: React.FC = () => {
+// 场景 6: 矩阵结合律（优化版 - 添加可视化）
+const MatrixAssociativitySceneOptimized: React.FC = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>矩阵结合律 - 改变计算顺序</h2>
-      <div style={styles.content}>
-        <div style={styles.row}>
-          <div style={{...styles.card, minWidth: '400px'}}>
-            <h3 style={{...styles.cardTitle, color: '#ef4444'}}>标准注意力</h3>
-            <div style={styles.formulaBox}>
-              <Latex formula="(Q \cdot K^T) \cdot V" displayMode />
+      
+      {/* 可视化对比 */}
+      <div style={styles.architectureBox}>
+        <div style={styles.layer}>
+          <div style={styles.layerLabel}>标准注意力</div>
+          <div style={styles.layerContent}>
+            <div style={{...styles.component, backgroundColor: '#ef4444', color: 'white'}}>
+              Q · K^T
             </div>
-            <p style={{...styles.text, marginBottom: '0.5rem'}}>先计算 <Latex formula="n \times n" /> 矩阵</p>
-            <p style={{...styles.complexity, color: '#ef4444'}}>
-              <Latex formula="O(n^2 \cdot d)" />
-            </p>
-          </div>
-          
-          <div style={{...styles.card, minWidth: '400px'}}>
-            <h3 style={{...styles.cardTitle, color: '#10b981'}}>线性注意力</h3>
-            <div style={styles.formulaBox}>
-              <Latex formula="\phi(Q) \cdot (\phi(K)^T \cdot V)" displayMode />
+            <div style={styles.component}>(n × n)</div>
+            <div style={styles.component}>· V</div>
+            <div style={{...styles.component, backgroundColor: '#ef4444', color: 'white'}}>
+              O(n²d)
             </div>
-            <p style={{...styles.textGreen, marginBottom: '0.5rem'}}>先计算 <Latex formula="d \times d" /> 矩阵</p>
-            <p style={{...styles.complexity, color: '#10b981'}}>
-              <Latex formula="O(n \cdot d^2)" />
-            </p>
           </div>
         </div>
         
-        <div style={styles.insight}>
-          <p style={styles.insightText}>
-            💡 加速比公式：<Latex formula="\frac{O(n^2 d)}{O(n d^2)} = \frac{n}{d}" />
-          </p>
-          <p style={{...styles.stepTextSmall, marginTop: '0.5rem'}}>
-            当 <Latex formula="n = 4096, d = 64" /> 时，加速 <Latex formula="\frac{4096}{64} = 64x" />
-          </p>
+        <div style={{textAlign: 'center', margin: '1rem 0', fontSize: '2rem', color: '#64748b'}}>
+          ⬇️ 矩阵结合律
         </div>
+        
+        <div style={styles.layer}>
+          <div style={styles.layerLabel}>线性注意力</div>
+          <div style={styles.layerContent}>
+            <div style={styles.component}>φ(Q) ·</div>
+            <div style={{...styles.componentHighlight, backgroundColor: '#10b981'}}>
+              (φ(K)^T · V)
+            </div>
+            <div style={styles.component}>(d × d)</div>
+            <div style={{...styles.componentHighlight, backgroundColor: '#10b981'}}>
+              O(nd²)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={styles.insight}>
+        <p style={styles.insightText}>
+          💡 加速比：<Latex formula="\frac{O(n^2 d)}{O(n d^2)} = \frac{n}{d}" />
+        </p>
+        <p style={{...styles.stepTextSmall, marginTop: '0.5rem'}}>
+          当 n=4096, d=64 时，加速 <strong style={{color: '#10b981'}}>64x</strong>
+        </p>
       </div>
     </div>
   );
 };
 
-// 场景 5: 性能对比
+// 场景 7: 复杂度对比
 const ComparisonScene: React.FC = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>复杂度对比</h2>
-      <div style={styles.row}>
-        <div style={styles.metric}>
-          <p style={{...styles.metricTitle, color: '#ef4444'}}>标准注意力</p>
-          <p style={styles.metricValue}><Latex formula="O(n^2)" /></p>
-          <p style={styles.metricDetail}>n=4096: ~16M ops</p>
+      
+      {/* 进度条可视化 */}
+      <div style={{width: '100%', maxWidth: '800px', marginBottom: '2rem'}}>
+        <div style={{marginBottom: '1.5rem'}}>
+          <p style={{...styles.stepText, marginBottom: '0.5rem'}}>标准注意力 O(n²)</p>
+          <div style={styles.progressBar}>
+            <div style={{...styles.progressFill, width: '100%', backgroundColor: '#ef4444'}}>
+              16M ops
+            </div>
+          </div>
         </div>
-        <div style={styles.metric}>
-          <p style={{...styles.metricTitle, color: '#10b981'}}>线性注意力</p>
-          <p style={styles.metricValue}><Latex formula="O(n)" /></p>
-          <p style={styles.metricDetail}>n=4096: ~64K ops</p>
+        
+        <div>
+          <p style={{...styles.stepText, marginBottom: '0.5rem'}}>线性注意力 O(n)</p>
+          <div style={styles.progressBar}>
+            <div style={{...styles.progressFill, width: '4%', backgroundColor: '#10b981'}}>
+              64K ops
+            </div>
+          </div>
         </div>
       </div>
+      
       <div style={styles.speedup}>
-        <p style={styles.speedupText}>256x 加速比</p>
+        <p style={styles.speedupText}>🚀 256x 加速比</p>
       </div>
     </div>
   );
 };
 
-// 场景 6: 应用场景
+// 场景 8: 应用场景
 const ApplicationScene: React.FC = () => {
   return (
     <div style={styles.container}>
@@ -526,101 +660,114 @@ const ApplicationScene: React.FC = () => {
   );
 };
 
-// 场景 7: DeltaNet & Gated DeltaNet
-const DeltaNetScene: React.FC = () => {
+// 场景 9: DeltaNet（优化版 - 添加架构图）
+const DeltaNetSceneOptimized: React.FC = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>DeltaNet: 可擦写的记忆</h2>
-      <div style={styles.content}>
-        <div style={styles.steps}>
-          <div style={styles.step}>
-            <span style={styles.stepNum}>❌</span>
-            <div>
-              <p style={styles.stepText}><strong>Linear Attention 问题</strong>：只加不减</p>
-              <div style={styles.formulaBox}>
-                <Latex formula="S_t = S_{t-1} + v_t k_t^T" displayMode />
-              </div>
-              <p style={styles.stepTextSmall}>d 维空间最多容纳 d 个正交向量 → 检索误差累积</p>
-            </div>
-          </div>
-          
-          <div style={styles.step}>
-            <span style={styles.stepNum}>✅</span>
-            <div>
-              <p style={styles.stepText}><strong>DeltaNet</strong>：Delta Rule 精确更新</p>
-              <div style={styles.formulaBox}>
-                <Latex formula="S_t = S_{t-1} - \beta_t(S_{t-1} k_t - v_t)k_t^T" displayMode />
-              </div>
-              <p style={styles.stepTextSmall}>β = 学习率，(S_{'{t-1}'}k_t - v_t) = 预测误差</p>
-            </div>
-          </div>
-          
-          <div style={styles.step}>
-            <span style={styles.stepNum}>⚡</span>
-            <div>
-              <p style={styles.stepText}><strong>Gated DeltaNet</strong>：加入遗忘门 α</p>
-              <div style={styles.formulaBox}>
-                <Latex formula="S_t = \alpha_t S_{t-1} - \beta_t S_{t-1} k_t k_t^T + \beta_t v_t k_t^T" displayMode />
-              </div>
-              <p style={styles.stepTextSmall}>
-                α → 0: 快速清空 | α → 1: 精确更新 | 灵活控制记忆
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// 场景 8: Qwen3-Next 架构
-const Qwen3NextScene: React.FC = () => {
-  return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Qwen3-Next: 混合注意力架构</h2>
-      <div style={styles.content}>
-        <div style={styles.row}>
-          <div style={{...styles.card, minWidth: '300px'}}>
-            <h3 style={{...styles.cardTitle, color: '#3b82f6'}}>75% Gated DeltaNet</h3>
+      
+      {/* 架构演进图 */}
+      <div style={styles.architectureBox}>
+        <div style={styles.layer}>
+          <div style={{...styles.layerLabel, color: '#ef4444'}}>❌ Linear Attn</div>
+          <div style={styles.layerContent}>
             <div style={styles.formulaBox}>
-              <Latex formula="O(n \cdot d^2)" />
+              <Latex formula="S_t = S_{t-1} + v_t k_t^T" />
             </div>
-            <p style={styles.stepTextSmall}>
-              ✅ 32K-256K 长序列<br/>
-              ✅ 无 KV Cache<br/>
-              ✅ 1/2700 算力
-            </p>
-          </div>
-          
-          <div style={{...styles.card, minWidth: '300px'}}>
-            <h3 style={{...styles.cardTitle, color: '#a78bfa'}}>25% Gated Attention</h3>
-            <div style={styles.formulaBox}>
-              <Latex formula="O(n^2 \cdot d)" />
+            <div style={{...styles.component, backgroundColor: '#ef4444', color: 'white', marginLeft: '1rem'}}>
+              只加不减
             </div>
-            <p style={styles.stepTextSmall}>
-              ✅ 精确检索<br/>
-              ✅ 关键信息<br/>
-              ✅ NeurIPS 最佳论文
-            </p>
           </div>
         </div>
         
-        <div style={styles.insight}>
-          <p style={styles.insightText}>
-            💡 设计哲学：在工程效率和模型效果之间探索平衡
+        <div style={styles.layer}>
+          <div style={{...styles.layerLabel, color: '#f59e0b'}}>✅ DeltaNet</div>
+          <div style={styles.layerContent}>
+            <div style={styles.formulaBox}>
+              <Latex formula="S_t = S_{t-1} - \beta_t(\text{error})k_t^T" />
+            </div>
+            <div style={{...styles.component, backgroundColor: '#f59e0b', color: 'white', marginLeft: '1rem'}}>
+              Delta Rule
+            </div>
+          </div>
+        </div>
+        
+        <div style={styles.layer}>
+          <div style={{...styles.layerLabel, color: '#10b981'}}>⚡ Gated</div>
+          <div style={styles.layerContent}>
+            <div style={styles.formulaBox}>
+              <Latex formula="S_t = \alpha_t S_{t-1} - \beta_t(\dots)" />
+            </div>
+            <div style={{...styles.componentHighlight, backgroundColor: '#10b981', marginLeft: '1rem'}}>
+              α Gate
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={styles.insight}>
+        <p style={styles.insightText}>
+          💡 α → 0: 快速清空 | α → 1: 精确更新
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// 场景 10: Qwen3-Next（优化版 - 添加架构图）
+const Qwen3NextSceneOptimized: React.FC = () => {
+  return (
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Qwen3-Next: 混合注意力架构</h2>
+      
+      {/* 架构比例可视化 */}
+      <div style={{width: '100%', maxWidth: '900px', marginBottom: '2rem'}}>
+        <div style={{marginBottom: '1rem'}}>
+          <p style={{...styles.stepText, marginBottom: '0.5rem'}}>
+            <span style={{color: '#3b82f6'}}>●</span> Gated DeltaNet (75%)
           </p>
-          <p style={{...styles.stepTextSmall, marginTop: '0.5rem'}}>
-            • MoE: 512 专家，3B active (A3B)<br/>
-            • MTP: Multi-Token Prediction<br/>
-            • 平均复杂度接近线性
+          <div style={styles.progressBar}>
+            <div style={{...styles.progressFill, width: '75%', backgroundColor: '#3b82f6'}}>
+              线性复杂度 · 长序列
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <p style={{...styles.stepText, marginBottom: '0.5rem'}}>
+            <span style={{color: '#a78bfa'}}>●</span> Gated Attention (25%)
           </p>
+          <div style={styles.progressBar}>
+            <div style={{...styles.progressFill, width: '25%', backgroundColor: '#a78bfa'}}>
+              精确检索
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 性能数据 */}
+      <div style={styles.grid}>
+        <div style={styles.appCard}>
+          <div style={styles.appIcon}>📊</div>
+          <h3 style={styles.appTitle}>256K 长上下文</h3>
+          <p style={styles.appDesc}>超长序列处理</p>
+        </div>
+        <div style={styles.appCard}>
+          <div style={styles.appIcon}>⚡</div>
+          <h3 style={styles.appTitle}>1/2700 算力</h3>
+          <p style={styles.appDesc}>极致效率</p>
+        </div>
+        <div style={styles.appCard}>
+          <div style={styles.appIcon}>🧠</div>
+          <h3 style={styles.appTitle}>512 专家 MoE</h3>
+          <p style={styles.appDesc}>3B active</p>
         </div>
       </div>
     </div>
   );
 };
 
-// 场景 9: 总结
+// 场景 11: 总结
 const SummaryScene: React.FC = () => {
   return (
     <div style={styles.container}>
@@ -628,27 +775,27 @@ const SummaryScene: React.FC = () => {
       <div style={styles.summaryGrid}>
         <div style={styles.summaryCard}>
           <span style={styles.summaryIcon}>📊</span>
-          <p style={styles.summaryText}>复杂度从 <Latex formula="O(n^2)" /> 降至 <Latex formula="O(n \cdot d^2)" /></p>
+          <p style={styles.summaryText}>复杂度 <Latex formula="O(n^2) \rightarrow O(n \cdot d^2)" /></p>
         </div>
         <div style={styles.summaryCard}>
           <span style={styles.summaryIcon}>🧮</span>
-          <p style={styles.summaryText}>利用核技巧近似 Softmax</p>
+          <p style={styles.summaryText}>核技巧近似 Softmax</p>
         </div>
         <div style={styles.summaryCard}>
           <span style={styles.summaryIcon}>🎯</span>
-          <p style={styles.summaryText}>矩阵结合律改变计算顺序</p>
+          <p style={styles.summaryText}>矩阵结合律改顺序</p>
         </div>
         <div style={styles.summaryCard}>
           <span style={styles.summaryIcon}>⚡</span>
-          <p style={styles.summaryText}>支持超长序列和流式处理</p>
+          <p style={styles.summaryText}>支持长序列和流式</p>
         </div>
         <div style={styles.summaryCard}>
           <span style={styles.summaryIcon}>🔄</span>
-          <p style={styles.summaryText}>DeltaNet: 可擦写记忆 + 精确更新</p>
+          <p style={styles.summaryText}>DeltaNet 可擦写记忆</p>
         </div>
         <div style={styles.summaryCard}>
           <span style={styles.summaryIcon}>🚀</span>
-          <p style={styles.summaryText}>Qwen3-Next: 混合架构 + MoE</p>
+          <p style={styles.summaryText}>Qwen3-Next 混合架构</p>
         </div>
       </div>
       <div style={styles.formulaBoxLarge}>
@@ -659,7 +806,7 @@ const SummaryScene: React.FC = () => {
 };
 
 // 主视频组件
-export const LinearAttentionVideoDeep: React.FC = () => {
+export const LinearAttentionVideoOptimized: React.FC = () => {
   return (
     <TransitionSeries>
       <TransitionSeries.Sequence durationInFrames={120}>
@@ -675,15 +822,15 @@ export const LinearAttentionVideoDeep: React.FC = () => {
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={300}>
-        <KernelTrickScene />
+        <KernelTrickSceneOptimized />
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={300}>
-        <FeatureMapScene />
+        <FeatureMapSceneOptimized />
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={300}>
-        <MatrixAssociativityScene />
+        <MatrixAssociativitySceneOptimized />
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={180}>
@@ -695,11 +842,11 @@ export const LinearAttentionVideoDeep: React.FC = () => {
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={300}>
-        <DeltaNetScene />
+        <DeltaNetSceneOptimized />
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={240}>
-        <Qwen3NextScene />
+        <Qwen3NextSceneOptimized />
       </TransitionSeries.Sequence>
       
       <TransitionSeries.Sequence durationInFrames={150}>
